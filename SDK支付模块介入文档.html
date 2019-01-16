@@ -371,10 +371,7 @@ kbd {
  } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
 
  }];
- self.payManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
-
- };
- //============================== 
+//============================ 
  //实时监听当前的支付状态
  self.payManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
 

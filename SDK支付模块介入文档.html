@@ -5,7 +5,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
+<title>SDK支付模块介入文档</title>
 
 
 <style type="text/css">
@@ -355,6 +355,10 @@ kbd {
 <div><pre><code class="language-none">@property (strong, nonatomic) LTPayManager *payManager;
 </code></pre></div>
 
+<p><strong><code>SDK</code>提供了两套回调方法，通过<code>delegate</code>模式和<code>Blocks</code>方式；</strong></p>
+
+<h4 id="toc_3">方法一:使用自定义的初始化方法，通过Blocks回调</h4>
+
 <div><pre><code class="language-none"> //============================== 
  GoodsModel *goodsModel = [[GoodsModel alloc]init];
  // 
@@ -363,32 +367,33 @@ kbd {
  goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
  goodsModel.custom = @{};
  //============================== 
- self.payManager = [[LTPayManager alloc]initPayWithViewModel:goodsModel  secuessBlocks:^(NSDictionary * _Nonnull secuessInfoData, NSString * _Nonnull secuessInfoMessage) {
-            // If it secuess， dosomething
-        } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
-              // If it fails， dosomething
-        }];
-        self.payManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
-           
-        };
+ self.payManager = [[LTPayManager alloc]initPayWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
+ } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
+
+ }];
+ self.payManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
+
+ };
  //============================== 
  //实时监听当前的支付状态
  self.payManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
 
-        };
+ };
 </code></pre></div>
 
-<blockquote>
-<h3 id="toc_3">4、代理回调和Blocks回调</h3>
-</blockquote>
+<h4 id="toc_4">方法二:使用alloc init的初始化方法，通过delegate回调</h4>
 
-<p><strong><code>SDK</code>提供了两套回调方法，通过<code>delegate</code>模式和<code>Blocks</code>方式；</strong></p>
+<div><pre><code class="language-none">GoodsModel *goodsModel = [[GoodsModel alloc]init];
+goodsModel.gid = @&quot;1&quot;;
+goodsModel.package_id = [self getAppBundleId];
+goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
+goodsModel.custom = @{};
+//==============================
+self.payManager = [[LTPayManager alloc]init];
+self.payManager.goodsModel = goodsModel;
+self.payManager.delegatePay = self;</code></pre></div>
 
-<p>如果实现了代理：</p>
-
-<div><pre><code class="language-none">self.payManager.delegatePay = self;</code></pre></div>
-
-<p>那么必须实现成功和失败代理：</p>
+<p>如果使用了这种方式初始化，那么必须实现成功和失败代理：</p>
 
 <div><pre><code class="language-none">-(void)paySuccessDelegate:(NSDictionary *)secuessInfoData secuessInfoMessage:(NSString *)secuessInfoMessage{
     NSLog(@&quot;errorInfoMessage===========%@,%@&quot;,secuessInfoData,secuessInfoMessage);
@@ -399,8 +404,10 @@ kbd {
 }
 </code></pre></div>
 
+<p>建议使用第一种方式初始化，使用<code>Blocks</code>回调。</p>
+
 <blockquote>
-<h3 id="toc_4">5、回调返回参数</h3>
+<h3 id="toc_5">4、回调返回参数</h3>
 </blockquote>
 
 <p>不论支付成功还是失败都返回状态码和对应的信息，
@@ -413,7 +420,7 @@ kbd {
 },==============Transaction is in queue, user has been charged.  Client should complete the transaction.</code></pre></div>
 
 <blockquote>
-<h3 id="toc_5">6、GoodsModel类</h3>
+<h3 id="toc_6">5、GoodsModel类</h3>
 </blockquote>
 
 <p><code>GoodsModel</code>类中有四个参数，</p>
@@ -428,7 +435,7 @@ kbd {
 @property (nonatomic, copy, nonnull) id custom</code></pre></div>
 
 <blockquote>
-<h3 id="toc_6">7、错误码</h3>
+<h3 id="toc_7">6、错误码</h3>
 </blockquote>
 
 <p>在<code>LTPayErrorCode</code>类中返回了各种情况状态码：可根据返回的不同状态码来判断是哪里出错了。</p>

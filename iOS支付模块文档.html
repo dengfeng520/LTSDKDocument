@@ -448,8 +448,10 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
 
 <p><img src="https://github.com/dengfeng520/LTSDKDocument/blob/master/demo2.jpeg?raw=true" alt="demo2"></p>
 
+<h3 id="toc_6">4、其他更多细节请阅读<a href="https://help.apple.com/app-store-connect/#/devb57be10e7">Apple官方文档：App内购买项目</a></h3>
+
 <blockquote>
-<h3 id="toc_6">4、导入头文件</h3>
+<h3 id="toc_7">4、导入头文件</h3>
 </blockquote>
 
 <div><pre><code class="language-none">// 支付管理类
@@ -458,7 +460,7 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
 #import &lt;LTGameSDK/GoodsModel.h&gt;</code></pre></div>
 
 <blockquote>
-<h3 id="toc_7">5、初始化</h3>
+<h3 id="toc_8">5、初始化</h3>
 </blockquote>
 
 <div><pre><code class="language-none">@property (strong, nonatomic) LTPayManager *payManager;
@@ -466,7 +468,7 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
 
 <p><strong><code>SDK</code>提供了两套回调方法，通过<code>delegate</code>模式和<code>Blocks</code>方式；</strong></p>
 
-<h4 id="toc_8">方法一:使用自定义的初始化方法，通过Blocks回调</h4>
+<h4 id="toc_9">方法一:使用自定义的初始化方法，通过Blocks回调</h4>
 
 <div><pre><code class="language-none"> //============================== 
  GoodsModel *goodsModel = [[GoodsModel alloc]init];
@@ -487,7 +489,7 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
  };
 </code></pre></div>
 
-<h4 id="toc_9">方法二:使用alloc init的初始化方法，通过delegate回调</h4>
+<h4 id="toc_10">方法二:使用alloc init的初始化方法，通过delegate回调</h4>
 
 <div><pre><code class="language-none">GoodsModel *goodsModel = [[GoodsModel alloc]init];
 goodsModel.gid = @&quot;1&quot;;
@@ -512,7 +514,7 @@ self.payManager.delegatePay = self;</code></pre></div>
 <p>建议使用第一种方式初始化，使用<code>Blocks</code>回调。</p>
 
 <blockquote>
-<h3 id="toc_10">6、回调返回参数</h3>
+<h3 id="toc_11">6、回调返回参数</h3>
 </blockquote>
 
 <p>不论支付成功还是失败都返回状态码和对应的信息，
@@ -525,7 +527,7 @@ self.payManager.delegatePay = self;</code></pre></div>
 },==============Transaction is in queue, user has been charged.  Client should complete the transaction.</code></pre></div>
 
 <blockquote>
-<h3 id="toc_11">7、GoodsModel类</h3>
+<h3 id="toc_12">7、GoodsModel类</h3>
 </blockquote>
 
 <p><code>GoodsModel</code>类中有四个参数，</p>
@@ -540,7 +542,7 @@ self.payManager.delegatePay = self;</code></pre></div>
 @property (nonatomic, copy, nonnull) id custom</code></pre></div>
 
 <blockquote>
-<h3 id="toc_12">8、错误码</h3>
+<h3 id="toc_13">8、错误码</h3>
 </blockquote>
 
 <p>在<code>LTPayErrorCode</code>类中返回了各种情况状态码：可根据返回的不同状态码来判断是哪里出错了。</p>

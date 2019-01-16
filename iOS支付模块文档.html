@@ -328,26 +328,35 @@ kbd {
 
 <body>
 
-<p><center><H1>支付模块接入文档</h1></center></p>
+<p><center><H1>iOS支付模块文档</h1></center></p>
 
 <blockquote>
-<h3 id="toc_0">1、简介</h3>
+<h3 id="toc_0">1、准备工作</h3>
 </blockquote>
+
+<h1 id="toc_1">1、请先阅读官方文档<a href="https://help.apple.com/app-store-connect/#/devb57be10e7">APP内购买项目</a></h1>
+
+<h1 id="toc_2">2、请在工程中设置<code>info.plist</code>中设置<code>Allow Arbitrary Loads</code>为YES！如果不知道怎么设置，<a href="https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http">请点这里</a></h1>
+
+<h1 id="toc_3">3、接入支付前请先<a href="https://dengfeng520.github.io/LTSDKDocument/LTGameSDK%E7%99%BB%E5%BD%95%E6%96%87%E6%A1%A3.html">登录</a>！</h1>
+
+<blockquote>
+<h3 id="toc_4">2、SDK支付模块介绍</h3>
+</blockquote>
+
+<p>为保证支付安全性，不出现掉单、漏单的情况，<code>SDK</code>采用了苹果验证和<code>LT</code>服务器二次验证的方式，主要业务逻辑为：</p>
+
+<p>(1)、游戏端掉用支付模块代码，由<code>SDK</code>向<code>LT</code>服务器发起一个订单请求；<br>
+(2)、拿到服务器给的订单<code>ID</code>后，<code>SDK</code>发起苹果支付；<br>
+(3)、苹果支付返回结果后，拿到支付<code>receiptData</code>和<code>transaction</code>信息；<br>
+(4)、<code>SDK</code>把苹果返回的<code>receiptData</code>信息发给服务端，<code>LT</code>服务器向苹果服务器校验；<br>
+(5)、服务端对苹果服务器响应数据做处理和校验订单的合法性；<br>
+(6)、最终通过服务器验证的结果来确定支付的结果；<br></p>
 
 <p><code>SDK</code>支付模块目前给的有3个<code>.h</code>文件:<br>
 (1)、<code>LTPayErrorCode</code>可以查看支付时的各种状态码或错误码；<br>
 (2)、<code>GoodsModel</code>传人参数的<code>Model</code>文件，可以查看有哪些参数是必传的，哪些是非必传的；<br>
 (3)、<code>LTPayManager</code>支付主类，用于完成支付、支付验证、支付回调等操作；</p>
-
-<blockquote>
-<h3 id="toc_1">2、准备工作</h3>
-</blockquote>
-
-<h1 id="toc_2">1、请确保<code>info.plist</code>中设置<code>Allow Arbitrary Loads</code>为YES！！！如果不知道怎么设置，<a href="https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http">点这里</a></h1>
-
-<h1 id="toc_3">2、请先<a href="https://dengfeng520.github.io/LTSDKDocument/LTGameSDK%E7%99%BB%E5%BD%95%E6%96%87%E6%A1%A3.html">登录</a>！！！</h1>
-
-<h1 id="toc_4">强调：确认完成以上两步操作后在进入下一步！！！</h1>
 
 <blockquote>
 <h3 id="toc_5">3、导入头文件</h3>
@@ -392,7 +401,6 @@ kbd {
 
 <div><pre><code class="language-none">GoodsModel *goodsModel = [[GoodsModel alloc]init];
 goodsModel.gid = @&quot;1&quot;;
-goodsModel.package_id = [self getAppBundleId];
 goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
 goodsModel.custom = @{};
 //==============================

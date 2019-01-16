@@ -5,7 +5,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>SDK支付模块介入文档</title>
+<title>iOS支付模块文档</title>
 
 
 <style type="text/css">
@@ -334,24 +334,110 @@ kbd {
 <h3 id="toc_0">1、准备工作</h3>
 </blockquote>
 
-<h1 id="toc_1">1、请先阅读官方文档<a href="https://help.apple.com/app-store-connect/#/devb57be10e7">APP内购买项目</a></h1>
+<h3 id="toc_1">1、请在工程中设置<code>info.plist</code>中设置<code>Allow Arbitrary Loads</code>为YES！<a href="https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http">设置方法请点这里</a></h3>
 
-<h1 id="toc_2">2、请在工程中设置<code>info.plist</code>中设置<code>Allow Arbitrary Loads</code>为YES！如果不知道怎么设置，<a href="https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http">请点这里</a></h1>
-
-<h1 id="toc_3">3、接入支付前请先<a href="https://dengfeng520.github.io/LTSDKDocument/LTGameSDK%E7%99%BB%E5%BD%95%E6%96%87%E6%A1%A3.html">登录</a>！</h1>
+<h3 id="toc_2">2、接入支付前请先<a href="https://dengfeng520.github.io/LTSDKDocument/LTGameSDK%E7%99%BB%E5%BD%95%E6%96%87%E6%A1%A3.html">登录</a>！</h3>
 
 <blockquote>
-<h3 id="toc_4">2、SDK支付模块介绍</h3>
+<h3 id="toc_3">2、支付模块流程说明</h3>
 </blockquote>
 
 <p>为保证支付安全性，不出现掉单、漏单的情况，<code>SDK</code>采用了苹果验证和<code>LT</code>服务器二次验证的方式，主要业务逻辑为：</p>
 
-<p>(1)、游戏端掉用支付模块代码，由<code>SDK</code>向<code>LT</code>服务器发起一个订单请求；<br>
+<p>(1)、客户端调用支付模块代码，由<code>SDK</code>向<code>LT</code>服务器发起一个订单请求；<br>
 (2)、拿到服务器给的订单<code>ID</code>后，<code>SDK</code>发起苹果支付；<br>
-(3)、苹果支付返回结果后，拿到支付<code>receiptData</code>和<code>transaction</code>信息；<br>
+(3)、苹果支付返回结果后，拿到支付<code>transaction</code>和<code>receipt_data</code>信息；<br>
 (4)、<code>SDK</code>把苹果返回的<code>receiptData</code>信息发给服务端，<code>LT</code>服务器向苹果服务器校验；<br>
 (5)、服务端对苹果服务器响应数据做处理和校验订单的合法性；<br>
 (6)、最终通过服务器验证的结果来确定支付的结果；<br></p>
+
+<p><img src="https://github.com/dengfeng520/LTSDKDocument/blob/master/demo1.png?raw=true" alt="demo1"></p>
+
+<p>(7)、支付成功回调
+支付成功回调的使用方法：
+需要CP服务器建立一个API供乐推服务调用
+回调地址所接受的参数格式</p>
+
+<p><code>METHOD: POST</code></p>
+
+<p><code>HEADER:Content-Type:application/json</code></p>
+
+<p><code>BODY:</code></p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">参数</th>
+<th style="text-align: center">类型</th>
+<th style="text-align: center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center"><code>lt_order_id</code></td>
+<td style="text-align: center">string</td>
+<td style="text-align: center">乐推订单号</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>pay_mode</code></td>
+<td style="text-align: center">int</td>
+<td style="text-align: center">支付方式</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>custom</code></td>
+<td style="text-align: center">array</td>
+<td style="text-align: center">dict</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>app_name</code></td>
+<td style="text-align: center">string</td>
+<td style="text-align: center">app名</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>package_name</code></td>
+<td style="text-align: center">string</td>
+<td style="text-align: center">包ID</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>lt_gid</code></td>
+<td style="text-align: center">int</td>
+<td style="text-align: center">乐推商品ID</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>price</code></td>
+<td style="text-align: center">double</td>
+<td style="text-align: center">金额</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>abb</code></td>
+<td style="text-align: center">string</td>
+<td style="text-align: center">币种缩写</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>time</code></td>
+<td style="text-align: center">int</td>
+<td style="text-align: center">支付时间戳</td>
+</tr>
+<tr>
+<td style="text-align: center"><code>token</code></td>
+<td style="text-align: center">string</td>
+<td style="text-align: center">加密验证token</td>
+</tr>
+</tbody>
+</table>
+
+<p>CP方为了安全起见需要对token进行验证
+token的加密方法为
+md5({BODY的第二个参数}{APP<em>SECRET</em>KEY}{支付时间戳})</p>
+
+<p>BODY参数除了custom和token其他参数均为乱序，和上表顺序不一样，所以每次需要针对BODY取第二个参数
+APP<em>SECRET</em>KEY在乐推平台创建应用时生成
+支付时间戳为BODY中的time</p>
+
+<blockquote>
+<h3 id="toc_4">3、支付SDK简介</h3>
+</blockquote>
 
 <p><code>SDK</code>支付模块目前给的有3个<code>.h</code>文件:<br>
 (1)、<code>LTPayErrorCode</code>可以查看支付时的各种状态码或错误码；<br>
@@ -359,7 +445,7 @@ kbd {
 (3)、<code>LTPayManager</code>支付主类，用于完成支付、支付验证、支付回调等操作；</p>
 
 <blockquote>
-<h3 id="toc_5">3、导入头文件</h3>
+<h3 id="toc_5">4、导入头文件</h3>
 </blockquote>
 
 <div><pre><code class="language-none">// 支付管理类
@@ -368,7 +454,7 @@ kbd {
 #import &lt;LTGameSDK/GoodsModel.h&gt;</code></pre></div>
 
 <blockquote>
-<h3 id="toc_6">4、初始化</h3>
+<h3 id="toc_6">5、初始化</h3>
 </blockquote>
 
 <div><pre><code class="language-none">@property (strong, nonatomic) LTPayManager *payManager;
@@ -422,7 +508,7 @@ self.payManager.delegatePay = self;</code></pre></div>
 <p>建议使用第一种方式初始化，使用<code>Blocks</code>回调。</p>
 
 <blockquote>
-<h3 id="toc_9">5、回调返回参数</h3>
+<h3 id="toc_9">6、回调返回参数</h3>
 </blockquote>
 
 <p>不论支付成功还是失败都返回状态码和对应的信息，
@@ -435,7 +521,7 @@ self.payManager.delegatePay = self;</code></pre></div>
 },==============Transaction is in queue, user has been charged.  Client should complete the transaction.</code></pre></div>
 
 <blockquote>
-<h3 id="toc_10">6、GoodsModel类</h3>
+<h3 id="toc_10">7、GoodsModel类</h3>
 </blockquote>
 
 <p><code>GoodsModel</code>类中有四个参数，</p>
@@ -450,7 +536,7 @@ self.payManager.delegatePay = self;</code></pre></div>
 @property (nonatomic, copy, nonnull) id custom</code></pre></div>
 
 <blockquote>
-<h3 id="toc_11">7、错误码</h3>
+<h3 id="toc_11">8、错误码</h3>
 </blockquote>
 
 <p>在<code>LTPayErrorCode</code>类中返回了各种情况状态码：可根据返回的不同状态码来判断是哪里出错了。</p>

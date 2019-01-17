@@ -366,7 +366,7 @@ pod &#39;WechatOpenSDK&#39;</code></pre></div>
 <h2 id="toc_1">第二步，初始化LT应用</h2>
 
 <blockquote>
-<p>1，在APPdelegate.h文件中导入头文件</p>
+<p>1，在AppDelegate.h文件中导入头文件</p>
 
 <div><pre><code class="language-none">#import &lt;LTGameSDK/LTSDKLoginManager.h&gt;</code></pre></div>
 
@@ -408,7 +408,7 @@ Build Setting -&gt; Other Linker Flags 添加-ObjC
 
 <p>3，配置-ObjC</p>
 
-<p>4,在APPdelegate.h文件中添加</p>
+<p>4,在AppDelegate.h文件中添加</p>
 
 <div><pre><code class="language-none">-(BOOL)application:(UIApplication *)app
            openURL:(NSURL *)url
@@ -468,7 +468,7 @@ withUIViewController:self];</code></pre></div>
 
 <blockquote>
 <p>1,添加URL schemes xxxx<br>
-2,在APPdelegate.h文件中添加</p>
+2,在AppDelegate.h文件中添加</p>
 
 <div><pre><code class="language-none">-(BOOL)application:(UIApplication *)app
            openURL:(NSURL *)url
@@ -477,7 +477,7 @@ withUIViewController:self];</code></pre></div>
     return YES;
 }</code></pre></div>
 
-<p>3，在APPdelegate.h中初始化</p>
+<p>3，在AppDelegate.h中初始化</p>
 
 <div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] registWeChatPlatform:@&quot;xxx&quot;];</code></pre></div>
 
@@ -543,7 +543,7 @@ withUIViewController:self];</code></pre></div>
      &lt;string&gt;mqzoneopensdkapi&lt;/string&gt;
      &lt;string&gt;mqzoneopensdk&lt;/string&gt;</code></pre></div>
 
-<p>6,在APPdelegate.h文件中添加</p>
+<p>6,在AppDelegate.h文件中添加</p>
 
 <div><pre><code class="language-none">-(BOOL)application:(UIApplication *)app
            openURL:(NSURL *)url
@@ -552,7 +552,7 @@ withUIViewController:self];</code></pre></div>
     return YES;
 }</code></pre></div>
 
-<p>7，在APPdelegate.h中初始化</p>
+<p>7，在AppDelegate.h中初始化</p>
 
 <div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] registQQPlatform:@&quot;xxxx&quot;];</code></pre></div>
 

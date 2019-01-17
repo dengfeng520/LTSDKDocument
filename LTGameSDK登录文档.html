@@ -328,41 +328,57 @@ kbd {
 
 <body>
 
-<blockquote>
 <h2 id="toc_0">第一步,添加库</h2>
 
+<blockquote>
 <p>1，将LTGameSDK.framework拖入项目中</p>
 
-<p>2，cocopods安装如下三方库 </p>
-</blockquote>
+<p>2，将IconResource.bundle资源文件拖入项目中</p>
+
+<p>3，cocopods安装如下三方库 </p>
 
 <div><pre><code class="language-none">use_frameworks!
-
-# Pods for LTGameSDK
 pod &#39;GoogleSignIn&#39;
 pod &#39;AFNetworking&#39;
 pod &#39;FacebookCore&#39;
 pod &#39;FacebookLogin&#39;
 pod &#39;FBSDKCoreKit&#39;, &#39;~&gt; 4.38.0&#39;
 pod &#39;FBSDKLoginKit&#39;, &#39;~&gt; 4.38.0&#39;
+# 如果不接入微信登录，删除 pod &#39;WechatOpenSDK&#39;
 pod &#39;WechatOpenSDK&#39;</code></pre></div>
 
+<p>info.plist添加如下字段</p>
+
+<div><pre><code class="language-none">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
+    &lt;dict&gt;
+        &lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;
+        &lt;true/&gt;
+    &lt;/dict&gt;</code></pre></div>
+
+<p>补充说明:</p>
+
 <blockquote>
-<h2 id="toc_1">第二步，初始化LT应用</h2>
+<p>1,文档中的xxx代表对应平台申请的应用ID，使用时可以根据接口参数说明进行设置<br>
+2，目前提供两种SDK的对应的framework文件，一种包含Facebook和Google登录，一钟包含所有的四种登录方式，使用哪个SDK就需要将其包含的<strong>所有</strong>登录方式所需的三方SDK导入（Facebook,Google,WeChat在podfile文件中添加或者删除对应的pod语句,QQ需要手动将其SDK拖入到项目中来添加）</p>
+</blockquote>
 </blockquote>
 
+<h2 id="toc_1">第二步，初始化LT应用</h2>
+
+<blockquote>
 <p>1，在APPdelegate.h文件中导入头文件</p>
 
 <div><pre><code class="language-none">#import &lt;LTGameSDK/LTSDKLoginManager.h&gt;</code></pre></div>
 
-<p>2,初始化应用<br>
+<p>2,初始化应用(传入AppID和AppKey)<br>
 <code>
 [[LTSDKLoginManager sharedInstance] registLTPlatformAppID:@&quot;xxxx&quot; withAppkey:@&quot;xxxx&quot;];
 </code></p>
+</blockquote>
 
-<blockquote>
 <h2 id="toc_2">第三步，集成对应的第三平台</h2>
 
+<blockquote>
 <p>URL Schemes 的添加方法</p>
 
 <p><img src="https://github.com/zhubinfeng/SDKDemo/blob/master/URL_Schemes.png?raw=true" alt=""></p>
@@ -401,11 +417,7 @@ Build Setting -&gt; Other Linker Flags 添加-ObjC
     return YES;
 }</code></pre></div>
 
-<p>5，在APPdelegate.h中初始化</p>
-
-<div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] registWeChatPlatform:@&quot;xxx&quot;];</code></pre></div>
-
-<p>6，登录调用</p>
+<p>5，登录调用</p>
 
 <div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] facebookLogin:^(LTUser * _Nonnull loginUser) {
         if (loginUser.stateCode == LTCodeTypeSuccess) {
@@ -560,23 +572,79 @@ withUIViewController:self];</code></pre></div>
             NSLog(@&quot;登录失败&quot;);
         }    }];</code></pre></div>
 </blockquote>
+</blockquote>
 
-<h2 id="toc_3">第四步，如果使用SDK提供的登录UI，使用如下接口调用</h2>
+<h2 id="toc_3">第四步，接口使用说明</h2>
+
+<blockquote>
+<p>1，使用SDK的登录UI</p>
+
+<blockquote>
+<p>1&gt;设置用户协议和隐私条款连接地址</p>
+
+<div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] linkOfUserAgreement:@&quot;https://github.com/&quot; 
+andPrivacyLine:@&quot;https://www.baidu.com/&quot;];</code></pre></div>
+
+<p>2&gt;调用UI界面进行显示</p>
 
 <div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] showLoginManagerUI:self withBlock:^(LTUser * _Nonnull loginUser) {
-        if (loginUser.stateCode == LTCodeTypeSuccess) {
-            if (loginUser.userType == LTUserTypeTourist) {
-                NSLog(@&quot;游客登录成功&quot;);
-            }else{
-                NSString *lt_UID = loginUser.LT_UID;
-                NSString *apiToken = loginUser.apiToken;
-            }
-        }else if (loginUser.stateCode == LTCodeTypeCancel){
-            NSLog(@&quot;用户取消了登录&quot;);
-        }else if (loginUser.stateCode == LTCodeTypeFailed){
-            NSLog(@&quot;登录失败&quot;);
-        }
-    }];</code></pre></div>
+      if (loginUser.stateCode == LTCodeTypeSuccess) {
+          if (loginUser.userType == LTUserTypeTourist) {
+              NSLog(@&quot;游客登录成功&quot;);
+          }else{
+              NSString *lt_UID = loginUser.LT_UID;
+              NSString *apiToken = loginUser.apiToken;
+          }
+      }else if (loginUser.stateCode == LTCodeTypeCancel){
+          NSLog(@&quot;用户取消了登录&quot;);
+      }else if (loginUser.stateCode == LTCodeTypeFailed){
+          NSLog(@&quot;登录失败&quot;);
+      }
+  }];</code></pre></div>
+</blockquote>
+
+<p>2,如何退出登录</p>
+
+<div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] userLogout];</code></pre></div>
+
+<p>3,获取当前用户信息</p>
+
+<blockquote>
+<p>1&gt;获取登录状态</p>
+</blockquote>
+
+<div><pre><code class="language-none">switch ([LTSDKLoginManager sharedInstance].currentUser.userType) {
+        case LTUserTypeFacebook:
+            NSLog(@&quot;LTUserTypeFacebook&quot;);
+            break;
+        case LTUserTypeGoogle:
+            NSLog(@&quot;LTUserTypeGoogle&quot;);
+            break;
+        case LTUserTypeWeChat:
+            NSLog(@&quot;LTUserTypeWeChat&quot;);
+            break;
+        case LTUserTypeQQ:
+            NSLog(@&quot;LTUserTypeQQ&quot;);
+            break;
+        case LTUserTypePhone:
+            NSLog(@&quot;LTUserTypePhone&quot;);
+            break;
+        case LTUserTypeUnLogin:
+            NSLog(@&quot;LTUserTypeUnLogin&quot;);
+            break;
+        case LTUserTypeOther:
+            NSLog(@&quot;LTUserTypeOther&quot;);
+            break;
+        case LTUserTypeTourist:
+            NSLog(@&quot;LTUserTypeTourist&quot;);
+            break;
+         default:
+              break;
+    }</code></pre></div>
+
+<p>2&gt;获取用户ID（获取其它信息可参考currentUser对象对应的LTUser.h文件的属性说明）</p>
+
+<div><pre><code class="language-none">NSString *lt_uid = [LTSDKLoginManager sharedInstance].currentUser.LT_UID;</code></pre></div>
 </blockquote>
 
 

@@ -51,11 +51,12 @@ CP方为了安全起见需要对token进行验证token的加密方法为md5({B
 
 >###3、准备工作
 
-###1、请在工程中设置`info.plist`中设置`Allow Arbitrary Loads`为YES！[设置方法请点这里](https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http)
-###2、接入支付前请先[登录](https://dengfeng520.github.io/LTSDKDocument/LTGameSDK%E7%99%BB%E5%BD%95%E6%96%87%E6%A1%A3.html)！
-###3、开启工程支付功能
+###1、软件和硬件条件:兼容`iOS 9`以及之后的所有版本的`iPhone`和`iPad`设备；
+###2、请在工程中设置`info.plist`中设置`Allow Arbitrary Loads`为YES！[设置方法请点这里](https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http)
+###3、接入支付前请先[登录](https://dengfeng520.github.io/LTSDKDocument/LTGameSDK%E7%99%BB%E5%BD%95%E6%96%87%E6%A1%A3.html)！
+###4、开启工程支付功能
 ![demo2](https://github.com/dengfeng520/LTSDKDocument/blob/master/demo2.jpeg?raw=true)
-###4、其他更多细节请阅读[Apple官方文档：App内购买项目配置](https://help.apple.com/app-store-connect/#/devb57be10e7)
+###5、其他更多细节请阅读[Apple官方文档：App内购买项目配置](https://help.apple.com/app-store-connect/#/devb57be10e7)
 
 >###4、导入头文件
 

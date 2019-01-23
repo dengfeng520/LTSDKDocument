@@ -479,10 +479,10 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
     //
     goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
     goodsModel.custom = @{};
-    self.playManager = [[LTPlayManager alloc]initBuyWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
-        
+   self.playManager = [[LTPlayManager alloc]initPlayWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
+
     } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
-        
+
     }];
     self.playManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
         

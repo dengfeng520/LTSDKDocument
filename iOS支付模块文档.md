@@ -85,10 +85,10 @@ CP方为了安全起见需要对token进行验证token的加密方法为md5({B
     //
     goodsModel.productId = @"com.gnetop.339Golds";
     goodsModel.custom = @{};
-    self.playManager = [[LTPlayManager alloc]initBuyWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
-        
+   self.playManager = [[LTPlayManager alloc]initPlayWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
+
     } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
-        
+
     }];
     self.playManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
         

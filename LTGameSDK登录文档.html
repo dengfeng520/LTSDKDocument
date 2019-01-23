@@ -331,23 +331,35 @@ kbd {
 <h2 id="toc_0">第一步,添加库</h2>
 
 <blockquote>
-<p>1，将LTGameSDK.framework拖入项目中</p>
+<p>1，cocopods安装三方库 </p>
 
-<p>2，将IconResource.bundle资源文件拖入项目中</p>
-
-<p>3，cocopods安装如下三方库 </p>
+<blockquote>
+<p>1集成所有登录平台（Facebook、Google、QQ、微信）使用如下命令集成</p>
 
 <div><pre><code class="language-none">use_frameworks!
-pod &#39;GoogleSignIn&#39;
+pod &#39;GoogleSignIn&#39;, &#39;~&gt; 4.4.0&#39;
 pod &#39;AFNetworking&#39;
 pod &#39;FacebookCore&#39;
 pod &#39;FacebookLogin&#39;
 pod &#39;FBSDKCoreKit&#39;, &#39;~&gt; 4.38.0&#39;
 pod &#39;FBSDKLoginKit&#39;, &#39;~&gt; 4.38.0&#39;
-# 如果不接入微信登录，删除 pod &#39;WechatOpenSDK&#39;
-pod &#39;WechatOpenSDK&#39;</code></pre></div>
+pod &#39;WechatOpenSDK&#39;
+pod &#39;LTQQOpenAPI&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTQQOpenAPI&#39;
+pod &#39;LTGameSDK&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTGameSDK&#39;</code></pre></div>
 
-<p>info.plist添加如下字段</p>
+<p>2只集成Facebook、Google登录平台使用如下命令集成</p>
+
+<div><pre><code class="language-none">use_frameworks!
+pod &#39;GoogleSignIn&#39;, &#39;~&gt; 4.4.0&#39;
+pod &#39;AFNetworking&#39;
+pod &#39;FacebookCore&#39;
+pod &#39;FacebookLogin&#39;
+pod &#39;FBSDKCoreKit&#39;, &#39;~&gt; 4.38.0&#39;
+pod &#39;FBSDKLoginKit&#39;, &#39;~&gt; 4.38.0&#39;
+pod &#39;LTGameSDKFG&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTGameSDKFG&#39;</code></pre></div>
+</blockquote>
+
+<p>2，info.plist添加如下字段</p>
 
 <div><pre><code class="language-none">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
     &lt;dict&gt;
@@ -358,15 +370,14 @@ pod &#39;WechatOpenSDK&#39;</code></pre></div>
 <p>补充说明:</p>
 
 <blockquote>
-<p>1,文档中的xxx代表对应平台申请的应用ID，使用时可以根据接口参数说明进行设置<br>
-2，目前提供两种SDK的对应的framework文件，一种包含Facebook和Google登录，一钟包含所有的四种登录方式，使用哪个SDK就需要将其包含的<strong>所有</strong>登录方式所需的三方SDK导入（Facebook,Google,WeChat在podfile文件中添加或者删除对应的pod语句,QQ需要手动将其SDK拖入到项目中来添加）</p>
+<p>1,文档中的xxx代表对应平台申请的应用ID，使用时可以根据接口参数说明进行设置<br></p>
 </blockquote>
 </blockquote>
 
 <h2 id="toc_1">第二步，初始化LT应用</h2>
 
 <blockquote>
-<p>1，在AppDelegate.h文件中导入头文件</p>
+<p>1，在APPdelegate.h文件中导入头文件</p>
 
 <div><pre><code class="language-none">#import &lt;LTGameSDK/LTSDKLoginManager.h&gt;</code></pre></div>
 
@@ -408,7 +419,7 @@ Build Setting -&gt; Other Linker Flags 添加-ObjC
 
 <p>3，配置-ObjC</p>
 
-<p>4,在AppDelegate.h文件中添加</p>
+<p>4,在APPdelegate.h文件中添加</p>
 
 <div><pre><code class="language-none">-(BOOL)application:(UIApplication *)app
            openURL:(NSURL *)url
@@ -461,14 +472,15 @@ withUIViewController:self];</code></pre></div>
             NSLog(@&quot;用户取消了登录&quot;);
         }else if (loginUser.stateCode == LTCodeTypeFailed){
             NSLog(@&quot;登录失败&quot;);
-        }    }];</code></pre></div>
+        }    
+    }];</code></pre></div>
 </blockquote>
 
 <p><strong>三 微信集成</strong></p>
 
 <blockquote>
 <p>1,添加URL schemes xxxx<br>
-2,在AppDelegate.h文件中添加</p>
+2,在APPdelegate.h文件中添加</p>
 
 <div><pre><code class="language-none">-(BOOL)application:(UIApplication *)app
            openURL:(NSURL *)url
@@ -477,7 +489,7 @@ withUIViewController:self];</code></pre></div>
     return YES;
 }</code></pre></div>
 
-<p>3，在AppDelegate.h中初始化</p>
+<p>3，在APPdelegate.h中初始化</p>
 
 <div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] registWeChatPlatform:@&quot;xxx&quot;];</code></pre></div>
 
@@ -495,32 +507,21 @@ withUIViewController:self];</code></pre></div>
             NSLog(@&quot;用户取消了登录&quot;);
         }else if (loginUser.stateCode == LTCodeTypeFailed){
             NSLog(@&quot;登录失败&quot;);
-        }    }];</code></pre></div>
+        }    
+    }];</code></pre></div>
 </blockquote>
 
 <p><strong>四 QQ集成</strong></p>
 
 <blockquote>
-<p>1,将QQ的TencentOpenAPI.framework拖到工程中，选中图中三项
-<img src="https://github.com/zhubinfeng/SDKDemo/blob/master/frameworkAdd.png?raw=true" alt=""></p>
+<p>1，添加URL schemes tencentxxxx</p>
 
-<p>2，配加依赖包</p>
+<p>2,配置-fobjc-arc(与配置-ObjC方法相同)</p>
 
-<blockquote>
-<p>“Security.framework”,“libiconv.tdb”，“SystemConfiguration.framework”，
-“CoreGraphics.Framework”、“libsqlit.3.tdb”、
-“CoreTelephony.framework”、“libz.tdb”</p>
+<p>3,在info.plist中添加如下字段</p>
 
-<p><img src="https://github.com/zhubinfeng/SDKDemo/blob/master/addLinkFramework.png?raw=true" alt=""></p>
-</blockquote>
-
-<p>3，配置-fobjc-arc(与配置-ObjC方法相同)</p>
-
-<p>4,添加URL schemes tencentxxxx</p>
-
-<p>5,在info.plist中 LSApplicationQueriesSchemes字段添加如下字段</p>
-
-<div><pre><code class="language-none">     &lt;string&gt;mqqapi&lt;/string&gt;
+<div><pre><code class="language-none">     &lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;
+     &lt;string&gt;mqqapi&lt;/string&gt;
      &lt;string&gt;mqq&lt;/string&gt;
      &lt;string&gt;mqqOpensdkSSoLogin&lt;/string&gt;
      &lt;string&gt;mqqconnect&lt;/string&gt;
@@ -543,7 +544,7 @@ withUIViewController:self];</code></pre></div>
      &lt;string&gt;mqzoneopensdkapi&lt;/string&gt;
      &lt;string&gt;mqzoneopensdk&lt;/string&gt;</code></pre></div>
 
-<p>6,在AppDelegate.h文件中添加</p>
+<p>4,在APPdelegate.h文件中添加</p>
 
 <div><pre><code class="language-none">-(BOOL)application:(UIApplication *)app
            openURL:(NSURL *)url
@@ -552,11 +553,11 @@ withUIViewController:self];</code></pre></div>
     return YES;
 }</code></pre></div>
 
-<p>7，在AppDelegate.h中初始化</p>
+<p>5，在APPdelegate.h中初始化</p>
 
 <div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] registQQPlatform:@&quot;xxxx&quot;];</code></pre></div>
 
-<p>8，登录处调用</p>
+<p>6，登录处调用</p>
 
 <div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] QQLogin:^(LTUser * _Nonnull loginUser) {
           if (loginUser.stateCode == LTCodeTypeSuccess) {
@@ -570,7 +571,8 @@ withUIViewController:self];</code></pre></div>
             NSLog(@&quot;用户取消了登录&quot;);
         }else if (loginUser.stateCode == LTCodeTypeFailed){
             NSLog(@&quot;登录失败&quot;);
-        }    }];</code></pre></div>
+        }    
+     }];</code></pre></div>
 </blockquote>
 </blockquote>
 
@@ -592,8 +594,9 @@ andPrivacyLine:@&quot;https://www.baidu.com/&quot;];</code></pre></div>
           if (loginUser.userType == LTUserTypeTourist) {
               NSLog(@&quot;游客登录成功&quot;);
           }else{
-              NSString *lt_UID = loginUser.LT_UID;
-              NSString *apiToken = loginUser.apiToken;
+                NSString *lt_UID = loginUser.LT_UID;
+                NSString *apiToken = loginUser.apiToken;
+                NSString *messageStr = loginUser.message;
           }
       }else if (loginUser.stateCode == LTCodeTypeCancel){
           NSLog(@&quot;用户取消了登录&quot;);
@@ -645,6 +648,10 @@ andPrivacyLine:@&quot;https://www.baidu.com/&quot;];</code></pre></div>
 <p>2&gt;获取用户ID（获取其它信息可参考currentUser对象对应的LTUser.h文件的属性说明）</p>
 
 <div><pre><code class="language-none">NSString *lt_uid = [LTSDKLoginManager sharedInstance].currentUser.LT_UID;</code></pre></div>
+
+<p>3&gt;获取此次登录附带信息（登录成功的附带提示信息、登录失败的错误提示等）</p>
+
+<div><pre><code class="language-none">NSString *messageStr = [LTSDKLoginManager sharedInstance].currentUser.message;</code></pre></div>
 </blockquote>
 
 

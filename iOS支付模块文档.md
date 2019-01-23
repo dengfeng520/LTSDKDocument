@@ -45,9 +45,9 @@ CP方为了安全起见需要对token进行验证token的加密方法为md5({B
 >###2、支付SDK简介
 
 `SDK`支付模块目前给的有3个`.h`文件:<br>
-(1)、`LTPayErrorCode`可以查看支付时的各种状态码或错误码；<br>
+(1)、`LTPlayErrorCode`可以查看支付时的各种状态码或错误码；<br>
 (2)、`GoodsModel`传人参数的`Model`文件，可以查看有哪些参数是必传的，哪些是非必传的；<br>
-(3)、`LTPayManager`支付主类，用于完成支付、支付验证、支付回调等操作；
+(3)、`LTPlayManager`支付主类，用于完成支付、支付验证、支付回调等操作；
 
 >###3、准备工作
 
@@ -62,7 +62,7 @@ CP方为了安全起见需要对token进行验证token的加密方法为md5({B
 
 ```
 // 支付管理类
-#import <LTGameSDK/LTPayManager.h>
+#import <LTGameSDK/LTPlayManager.h>
 // Model类
 #import <LTGameSDK/GoodsModel.h>
 ```
@@ -70,7 +70,7 @@ CP方为了安全起见需要对token进行验证token的加密方法为md5({B
 
 
 ```
-@property (strong, nonatomic) LTPayManager *payManager;
+@property (strong, nonatomic) LTPlayManager *playManager;
 
 ```
 **`SDK`提供了两套回调方法，通过`delegate`模式和`Blocks`方式；**
@@ -78,24 +78,21 @@ CP方为了安全起见需要对token进行验证token的加密方法为md5({B
 ####方法一:使用自定义的初始化方法，通过Blocks回调
 
 ```
- //============================== 
- GoodsModel *goodsModel = [[GoodsModel alloc]init];
- // 
- goodsModel.gid = @"1";
- // 
- goodsModel.productId = @"com.gnetop.339Golds";
- goodsModel.custom = @{};
- //============================== 
- self.payManager = [[LTPayManager alloc]initPayWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
- } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
-
- }];
-//============================ 
- //实时监听当前的支付状态
- self.payManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
-
- };
-
+    //==============================
+    GoodsModel *goodsModel = [[GoodsModel alloc]init];
+    //
+    goodsModel.gid = @"1";
+    //
+    goodsModel.productId = @"com.gnetop.339Golds";
+    goodsModel.custom = @{};
+    self.playManager = [[LTPlayManager alloc]initBuyWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
+        
+    } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
+        
+    }];
+    self.playManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
+        
+    };  
 ```
 ####方法二:使用alloc init的初始化方法，通过delegate回调
 
@@ -105,19 +102,20 @@ goodsModel.gid = @"1";
 goodsModel.productId = @"com.gnetop.339Golds";
 goodsModel.custom = @{};
 //==============================
-self.payManager = [[LTPayManager alloc]init];
-self.payManager.goodsModel = goodsModel;
-self.payManager.delegatePay = self;
+self.playManager = [[LTPlayManager alloc]init];
+self.playManager.goodsModel = goodsModel;
+self.playManager.delegatePlay = self;
 ```
 
 如果使用了这种方式初始化，那么必须实现成功和失败代理：
 
 ```
--(void)paySuccessDelegate:(NSDictionary *)secuessInfoData secuessInfoMessage:(NSString *)secuessInfoMessage{
+// pay Success delegate
+-(void)playSuccessDelegate:(int)code secuessInfoData:(NSDictionary *)secuessInfoData secuessInfoMessage:(NSString *)secuessInfoMessage{
     NSLog(@"errorInfoMessage===========%@,%@",secuessInfoData,secuessInfoMessage);
 }
 // pay failure delegate
--(void)payFailureDelegate:(int)error errorInfoMessage:(NSString *)errorInfoMessage{
+-(void)playFailureDelegate:(int)error errorInfoMessage:(NSString *)errorInfoMessage{
     NSLog(@"errorInfoMessage===========%d,%@",error,errorInfoMessage);
 }
 
@@ -155,11 +153,11 @@ code,secuessInfoData,secuessInfoMessage===========1000,{
 
 >###8、错误码
 
-在`LTPayErrorCode`类中返回了各种情况状态码：可根据返回的不同状态码来判断是哪里出错了。
+在`LTPlayErrorCode`类中返回了各种情况状态码：可根据返回的不同状态码来判断是哪里出错了。
 
 ```
     /// 购买成功
-    TypePaySuccess = 1000,
+    TypePlaySuccess = 1000,
     /// 请求订单时失败
     TypeGetOrderFailure = 1001,
     /// 没有商品 Product list is null
@@ -167,16 +165,16 @@ code,secuessInfoData,secuessInfoMessage===========1000,{
     /// 商品ID和苹果给的不匹配Product ID and apple server do not match
     TypeProductIDNotMatch = 1003,
     /// 正在购买 buying
-    TypeBuyingfromAppleServer = 1004,
+    TypePlayingfromAppleServer = 1004,
     /// 已经收到Apple的购买成功通知 正在和服务器验证
     TypeMineServerVerifying = 1005,
     /// 购买失败
-    TypePayFailureCode = 1006,
+    TypePlayFailureCode = 1006,
     /// 已经购买， Apple正在处理
-    TypePaymentTransactionStateRestored = 1007,
+    TypePlaymentTransactionStateRestored = 1007,
     /// 正在购买中，最终状态还没确定
-    TypePaymentTransactionStateDeferred = 1008,
+    TypePlaymentTransactionStateDeferred = 1008,
     /// 服务器验证支付失败
-    TypeServerPaymentVerificationFailed = 1009,  
+    TypeServerPlaymentVerificationFailed = 1009,
 
 ```

@@ -432,15 +432,15 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
 </blockquote>
 
 <p><code>SDK</code>支付模块目前给的有3个<code>.h</code>文件:<br>
-(1)、<code>LTPayErrorCode</code>可以查看支付时的各种状态码或错误码；<br>
+(1)、<code>LTPlayErrorCode</code>可以查看支付时的各种状态码或错误码；<br>
 (2)、<code>GoodsModel</code>传人参数的<code>Model</code>文件，可以查看有哪些参数是必传的，哪些是非必传的；<br>
-(3)、<code>LTPayManager</code>支付主类，用于完成支付、支付验证、支付回调等操作；</p>
+(3)、<code>LTPlayManager</code>支付主类，用于完成支付、支付验证、支付回调等操作；</p>
 
 <blockquote>
 <h3 id="toc_2">3、准备工作</h3>
 </blockquote>
 
-<h3 id="toc_3">1、软件和硬件条件:兼容<code>iOS 9</code>之后的所有版本的<code>iPhone</code>和<code>iPad</code>设备；</h3>
+<h3 id="toc_3">1、软件和硬件条件:兼容<code>iOS 9</code>以及之后的所有版本的<code>iPhone</code>和<code>iPad</code>设备；</h3>
 
 <h3 id="toc_4">2、请在工程中设置<code>info.plist</code>中设置<code>Allow Arbitrary Loads</code>为YES！<a href="https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http">设置方法请点这里</a></h3>
 
@@ -457,7 +457,7 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
 </blockquote>
 
 <div><pre><code class="language-none">// 支付管理类
-#import &lt;LTGameSDK/LTPayManager.h&gt;
+#import &lt;LTGameSDK/LTPlayManager.h&gt;
 // Model类
 #import &lt;LTGameSDK/GoodsModel.h&gt;</code></pre></div>
 
@@ -465,31 +465,28 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
 <h3 id="toc_9">5、初始化</h3>
 </blockquote>
 
-<div><pre><code class="language-none">@property (strong, nonatomic) LTPayManager *payManager;
+<div><pre><code class="language-none">@property (strong, nonatomic) LTPlayManager *playManager;
 </code></pre></div>
 
 <p><strong><code>SDK</code>提供了两套回调方法，通过<code>delegate</code>模式和<code>Blocks</code>方式；</strong></p>
 
 <h4 id="toc_10">方法一:使用自定义的初始化方法，通过Blocks回调</h4>
 
-<div><pre><code class="language-none"> //============================== 
- GoodsModel *goodsModel = [[GoodsModel alloc]init];
- // 
- goodsModel.gid = @&quot;1&quot;;
- // 
- goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
- goodsModel.custom = @{};
- //============================== 
- self.payManager = [[LTPayManager alloc]initPayWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
- } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
-
- }];
-//============================ 
- //实时监听当前的支付状态
- self.payManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
-
- };
-</code></pre></div>
+<div><pre><code class="language-none">    //==============================
+    GoodsModel *goodsModel = [[GoodsModel alloc]init];
+    //
+    goodsModel.gid = @&quot;1&quot;;
+    //
+    goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
+    goodsModel.custom = @{};
+    self.playManager = [[LTPlayManager alloc]initBuyWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
+        
+    } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
+        
+    }];
+    self.playManager.nowStatusBlocks = ^(int code, NSString * _Nonnull nowInfoMessage) {
+        
+    };  </code></pre></div>
 
 <h4 id="toc_11">方法二:使用alloc init的初始化方法，通过delegate回调</h4>
 
@@ -498,17 +495,18 @@ goodsModel.gid = @&quot;1&quot;;
 goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
 goodsModel.custom = @{};
 //==============================
-self.payManager = [[LTPayManager alloc]init];
-self.payManager.goodsModel = goodsModel;
-self.payManager.delegatePay = self;</code></pre></div>
+self.playManager = [[LTPlayManager alloc]init];
+self.playManager.goodsModel = goodsModel;
+self.playManager.delegatePlay = self;</code></pre></div>
 
 <p>如果使用了这种方式初始化，那么必须实现成功和失败代理：</p>
 
-<div><pre><code class="language-none">-(void)paySuccessDelegate:(NSDictionary *)secuessInfoData secuessInfoMessage:(NSString *)secuessInfoMessage{
+<div><pre><code class="language-none">// pay Success delegate
+-(void)playSuccessDelegate:(int)code secuessInfoData:(NSDictionary *)secuessInfoData secuessInfoMessage:(NSString *)secuessInfoMessage{
     NSLog(@&quot;errorInfoMessage===========%@,%@&quot;,secuessInfoData,secuessInfoMessage);
 }
 // pay failure delegate
--(void)payFailureDelegate:(int)error errorInfoMessage:(NSString *)errorInfoMessage{
+-(void)playFailureDelegate:(int)error errorInfoMessage:(NSString *)errorInfoMessage{
     NSLog(@&quot;errorInfoMessage===========%d,%@&quot;,error,errorInfoMessage);
 }
 </code></pre></div>
@@ -547,10 +545,10 @@ self.payManager.delegatePay = self;</code></pre></div>
 <h3 id="toc_14">8、错误码</h3>
 </blockquote>
 
-<p>在<code>LTPayErrorCode</code>类中返回了各种情况状态码：可根据返回的不同状态码来判断是哪里出错了。</p>
+<p>在<code>LTPlayErrorCode</code>类中返回了各种情况状态码：可根据返回的不同状态码来判断是哪里出错了。</p>
 
 <div><pre><code class="language-none">    /// 购买成功
-    TypePaySuccess = 1000,
+    TypePlaySuccess = 1000,
     /// 请求订单时失败
     TypeGetOrderFailure = 1001,
     /// 没有商品 Product list is null
@@ -558,17 +556,17 @@ self.payManager.delegatePay = self;</code></pre></div>
     /// 商品ID和苹果给的不匹配Product ID and apple server do not match
     TypeProductIDNotMatch = 1003,
     /// 正在购买 buying
-    TypeBuyingfromAppleServer = 1004,
+    TypePlayingfromAppleServer = 1004,
     /// 已经收到Apple的购买成功通知 正在和服务器验证
     TypeMineServerVerifying = 1005,
     /// 购买失败
-    TypePayFailureCode = 1006,
+    TypePlayFailureCode = 1006,
     /// 已经购买， Apple正在处理
-    TypePaymentTransactionStateRestored = 1007,
+    TypePlaymentTransactionStateRestored = 1007,
     /// 正在购买中，最终状态还没确定
-    TypePaymentTransactionStateDeferred = 1008,
+    TypePlaymentTransactionStateDeferred = 1008,
     /// 服务器验证支付失败
-    TypeServerPaymentVerificationFailed = 1009,  
+    TypeServerPlaymentVerificationFailed = 1009,
 </code></pre></div>
 
 

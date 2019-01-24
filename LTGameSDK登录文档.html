@@ -5,7 +5,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>LTGameSDK登录文档</title>
+<title>LTGameSDK登录文档1.0.1</title>
 
 
 <style type="text/css">
@@ -328,6 +328,26 @@ kbd {
 
 <body>
 
+<p>更新说明:</p>
+
+<table>
+<thead>
+<tr>
+<th>版本号</th>
+<th>需求</th>
+<th>修改内容</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1.0.1</td>
+<td>使用不包含支付模块的微信SDK<br>避免审核被拒</td>
+<td>pod &#39;WechatOpenSDK&#39;<br> 修改为<br> pod &#39;WechatOpenSDK_NoPay&#39;</td>
+</tr>
+</tbody>
+</table>
+
 <h2 id="toc_0">第一步,添加库</h2>
 
 <blockquote>
@@ -343,7 +363,7 @@ pod &#39;FacebookCore&#39;
 pod &#39;FacebookLogin&#39;
 pod &#39;FBSDKCoreKit&#39;, &#39;~&gt; 4.38.0&#39;
 pod &#39;FBSDKLoginKit&#39;, &#39;~&gt; 4.38.0&#39;
-pod &#39;WechatOpenSDK&#39;
+pod &#39;WechatOpenSDK_NoPay&#39;, &#39;~&gt; 1.8.0&#39;
 pod &#39;LTQQOpenAPI&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTQQOpenAPI&#39;
 pod &#39;LTGameSDK&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTGameSDK&#39;</code></pre></div>
 

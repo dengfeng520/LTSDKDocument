@@ -5,7 +5,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>LTGameSDK登录文档1.0.1</title>
+<title>LTGameSDK登录文档1.0.2</title>
 
 
 <style type="text/css">
@@ -342,8 +342,13 @@ kbd {
 <tbody>
 <tr>
 <td>1.0.1</td>
-<td>使用不包含支付模块的微信SDK<br>避免审核被拒</td>
+<td>使用不包含支付模块的微信SDK避免审核被拒</td>
 <td>pod &#39;WechatOpenSDK&#39;<br> 修改为<br> pod &#39;WechatOpenSDK_NoPay&#39;</td>
+</tr>
+<tr>
+<td>1.0.2</td>
+<td>新增判断用户是否同意用户协议和隐私条款的接口说明</td>
+<td>新增 isUserAgreesTerms 使用说明</td>
 </tr>
 </tbody>
 </table>
@@ -633,8 +638,7 @@ andPrivacyLine:@&quot;https://www.baidu.com/&quot;];</code></pre></div>
 <p>3,获取当前用户信息</p>
 
 <blockquote>
-<p>1&gt;获取登录状态</p>
-</blockquote>
+<p>1获取登录状态</p>
 
 <div><pre><code class="language-none">switch ([LTSDKLoginManager sharedInstance].currentUser.userType) {
         case LTUserTypeFacebook:
@@ -665,13 +669,18 @@ andPrivacyLine:@&quot;https://www.baidu.com/&quot;];</code></pre></div>
               break;
     }</code></pre></div>
 
-<p>2&gt;获取用户ID（获取其它信息可参考currentUser对象对应的LTUser.h文件的属性说明）</p>
+<p>2获取用户ID（获取其它信息可参考currentUser对象对应的LTUser.h文件的属性说明）</p>
 
 <div><pre><code class="language-none">NSString *lt_uid = [LTSDKLoginManager sharedInstance].currentUser.LT_UID;</code></pre></div>
 
-<p>3&gt;获取此次登录附带信息（登录成功的附带提示信息、登录失败的错误提示等）</p>
+<p>3获取此次登录附带信息（登录成功的附带提示信息、登录失败的错误提示等）</p>
 
 <div><pre><code class="language-none">NSString *messageStr = [LTSDKLoginManager sharedInstance].currentUser.message;</code></pre></div>
+
+<p>4判断当前用户是否同意了用户协议和隐私条款</p>
+
+<div><pre><code class="language-none">BOOL isAgreeTerms = [[LTSDKLoginManager sharedInstance] isUserAgreesTerms];</code></pre></div>
+</blockquote>
 </blockquote>
 
 

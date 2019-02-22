@@ -5,7 +5,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>LTGameSDK登录文档1.0.2</title>
+<title>LTGameSDK登录文档1.0.3</title>
 
 
 <style type="text/css">
@@ -350,6 +350,11 @@ kbd {
 <td>新增判断用户是否同意用户协议和隐私条款的接口说明</td>
 <td>新增 isUserAgreesTerms 使用说明</td>
 </tr>
+<tr>
+<td>1.0.3</td>
+<td>新增马甲包集成代码</td>
+<td>添加 pod &#39;CLTGameSDK&#39; 与 pod &#39;CLTGameSDKFG&#39;</td>
+</tr>
 </tbody>
 </table>
 
@@ -370,7 +375,11 @@ pod &#39;FBSDKCoreKit&#39;, &#39;~&gt; 4.38.0&#39;
 pod &#39;FBSDKLoginKit&#39;, &#39;~&gt; 4.38.0&#39;
 pod &#39;WechatOpenSDK_NoPay&#39;, &#39;~&gt; 1.8.0&#39;
 pod &#39;LTQQOpenAPI&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTQQOpenAPI&#39;
-pod &#39;LTGameSDK&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTGameSDK&#39;</code></pre></div>
+# 正式包与马甲包两者选其一使用
+# 正式包使用如下命令集成
+pod &#39;LTGameSDK&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTGameSDK&#39;
+# 马甲包使用如下命令集成
+pod &#39;CLTGameSDK&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/CLTGameSDK&#39;</code></pre></div>
 
 <p>2只集成Facebook、Google登录平台使用如下命令集成</p>
 
@@ -381,7 +390,11 @@ pod &#39;FacebookCore&#39;
 pod &#39;FacebookLogin&#39;
 pod &#39;FBSDKCoreKit&#39;, &#39;~&gt; 4.38.0&#39;
 pod &#39;FBSDKLoginKit&#39;, &#39;~&gt; 4.38.0&#39;
-pod &#39;LTGameSDKFG&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTGameSDKFG&#39;</code></pre></div>
+# 正式包与马甲包两者选其一使用
+# 正式包使用如下命令集成
+pod &#39;LTGameSDKFG&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/LTGameSDKFG&#39;
+# 马甲包使用如下命令集成
+pod &#39;CLTGameSDKFG&#39;, :git =&gt; &#39;https://github.com/zhubinfeng/CLTGameSDKFG&#39;</code></pre></div>
 </blockquote>
 
 <p>2，info.plist添加如下字段</p>

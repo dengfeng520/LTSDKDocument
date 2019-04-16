@@ -5,7 +5,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>LTGameSDK登录文档1.0.4</title>
+<title>LTGameSDK登录文档</title>
 
 
 <style type="text/css">
@@ -360,6 +360,11 @@ kbd {
 <td>新增登录返回参数，添加游客登录接口</td>
 <td>用于检验的参数LTUidToken,游客登录接口touristLogin:(loginUserBlock)block</td>
 </tr>
+<tr>
+<td>1.0.5</td>
+<td>优化登出接口</td>
+<td>userLogoutToLoginUI(清除数据，弹出登录提示框) userLogout(清除数据，不弹出登录框)</td>
+</tr>
 </tbody>
 </table>
 
@@ -651,7 +656,33 @@ andPrivacyLine:@&quot;https://www.baidu.com/&quot;];</code></pre></div>
 
 <p>2,如何退出登录</p>
 
+<blockquote>
+<p>1只清除数据，不弹出SDK登录界面</p>
+</blockquote>
+
 <div><pre><code class="language-none">[[LTSDKLoginManager sharedInstance] userLogout];</code></pre></div>
+
+<blockquote>
+<p>2清除数据并弹出SDK登录界面</p>
+</blockquote>
+
+<div><pre><code class="language-none">   [[LTSDKLoginManager sharedInstance] userLogoutToLoginUI:self withBlock:^(LTUser * _Nonnull loginUser) {
+        if (loginUser.stateCode == LTCodeTypeSuccess) {
+            if (loginUser.userType == LTUserTypeTourist) {
+                NSLog(@&quot;游客登录成功&quot;);
+            }else{
+                NSString *lt_UID = loginUser.LT_UID;
+                NSString *LTUidToken = loginUser.LTUidToken;
+                NSString *messageStr = loginUser.message;
+            }
+        }else if (loginUser.stateCode == LTCodeTypeCancel){
+            NSLog(@&quot;用户取消了登录&quot;);
+        }else if (loginUser.stateCode == LTCodeTypeFailed){
+            NSLog(@&quot;登录失败&quot;);
+        }
+        NSLog(@&quot;Message = %@&quot;,loginUser.message);
+        [self checkUserInfo];
+    }];</code></pre></div>
 
 <p>3,获取当前用户信息</p>
 

@@ -474,11 +474,10 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
 
 <div><pre><code class="language-none">    //==============================
     GoodsModel *goodsModel = [[GoodsModel alloc]init];
-    //
     goodsModel.gid = @&quot;1&quot;;
-    //
     goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
     goodsModel.custom = @{};
+    goodsModel.payType = LTPayTypeDevelop;
    self.playManager = [[LTPlayManager alloc]initPlayWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
 
     } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
@@ -494,6 +493,7 @@ APP<em>SECRET</em>KEY在乐推平台创建应用时生成
 goodsModel.gid = @&quot;1&quot;;
 goodsModel.productId = @&quot;com.gnetop.339Golds&quot;;
 goodsModel.custom = @{};
+goodsModel.payType = LTPayTypeDevelop;
 //==============================
 self.playManager = [[LTPlayManager alloc]init];
 self.playManager.goodsModel = goodsModel;
@@ -568,6 +568,24 @@ self.playManager.delegatePlay = self;</code></pre></div>
     /// 服务器验证支付失败
     TypeServerPlaymentVerificationFailed = 1009,
 </code></pre></div>
+
+<blockquote>
+<h3 id="toc_15">9、test or release</h3>
+</blockquote>
+
+<div><pre><code class="language-none">typedef NS_ENUM(NSInteger,LTPayType)
+{
+    LTPayTypeDistribute = 0,
+    LTPayTypeDevelop,
+};</code></pre></div>
+
+<p>在初始化<code>SDK</code>时需要传入当前环境标记，如果是测试环境,</p>
+
+<div><pre><code class="language-none">goodsModel.payType = LTPayTypeDevelop;</code></pre></div>
+
+<p>如果是正式环境：</p>
+
+<div><pre><code class="language-none">goodsModel.payType = LTPayTypeDistribute;</code></pre></div>
 
 
 

@@ -80,11 +80,10 @@ CP方为了安全起见需要对token进行验证token的加密方法为md5({B
 ```
     //==============================
     GoodsModel *goodsModel = [[GoodsModel alloc]init];
-    //
     goodsModel.gid = @"1";
-    //
     goodsModel.productId = @"com.gnetop.339Golds";
     goodsModel.custom = @{};
+    goodsModel.payType = LTPayTypeDevelop;
    self.playManager = [[LTPlayManager alloc]initPlayWithViewModel:goodsModel SuccessBlocks:^(int code, NSDictionary * _Nonnull successInfoData, NSString * _Nonnull secuessInfoMessage) {
 
     } failureBlocks:^(int error, NSString * _Nonnull errorInfoMessage) {
@@ -101,6 +100,7 @@ GoodsModel *goodsModel = [[GoodsModel alloc]init];
 goodsModel.gid = @"1";
 goodsModel.productId = @"com.gnetop.339Golds";
 goodsModel.custom = @{};
+goodsModel.payType = LTPayTypeDevelop;
 //==============================
 self.playManager = [[LTPlayManager alloc]init];
 self.playManager.goodsModel = goodsModel;
@@ -177,4 +177,25 @@ code,secuessInfoData,secuessInfoMessage===========1000,{
     /// 服务器验证支付失败
     TypeServerPlaymentVerificationFailed = 1009,
 
+```
+
+>###9、test or release
+
+```
+typedef NS_ENUM(NSInteger,LTPayType)
+{
+    LTPayTypeDistribute = 0,
+    LTPayTypeDevelop,
+};
+```
+在初始化`SDK`时需要传入当前环境标记，如果是测试环境,
+
+```
+goodsModel.payType = LTPayTypeDevelop;
+```
+
+如果是正式环境：
+
+```
+goodsModel.payType = LTPayTypeDistribute;
 ```
